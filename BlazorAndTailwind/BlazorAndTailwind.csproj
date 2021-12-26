@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -10,5 +10,12 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.1" PrivateAssets="all" />
   </ItemGroup>
+
+	<!--<Target Name="UpdateTailwindCSS" BeforeTargets="Compile">
+		<Exec Command="tw -i .\wwwroot\css\app.css -o .\wwwroot\css\app.min.css" ContinueOnError="true">
+			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
+		</Exec>
+		<Error Condition="'$(ErrorCode)' != '0'" Text="Error building CSS file"/>
+	</Target>-->
 
 </Project>
