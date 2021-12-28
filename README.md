@@ -70,7 +70,7 @@ This takes your current CSS file (app.css), prepends its content to generated ta
 - There is currently no tailwind package in the chocolatey package manager. You can vote for it [here](https://github.com/tailwindlabs/tailwindcss/discussions/6650).
 - There is [this](https://github.com/tailwindlabs/tailwindcss-intellisense) a good extension for vscode, which brings pleasant experience from tailwind playground to your desktop. For me ([and other folks](https://github.com/tailwindlabs/tailwindcss-intellisense/issues/448)) it doesn't work in v3.
 - I had a bad experience with dotnet hot reload when CSS files are regenerated. It does weird things, like not updating (even after Ctrl+R), serving older versions, etc.. You can turn off hot reloading with: `dotnet watch --project . --no-hot-reload`. I am in the progress of finding a better solution. Anybody knows it already?
-- If you want to build your CSS file every time you reload your project you can add the following into your .csproj file. You do have to change the command to set the input and output directories and the executable name and it should work. However it doesn't trigger on hot reloads so you have to reload manually.
+- If you want to build your CSS file every time you reload your project you can add the following into your `.csproj` file. You do have to change the command to set the input and output directories and the executable name and it should work. However it doesn't trigger on hot reloads so you have to reload manually.
 
     ```xml
     <Target Name="UpdateTailwindCSS" BeforeTargets="Compile">
@@ -80,3 +80,21 @@ This takes your current CSS file (app.css), prepends its content to generated ta
       <Error Condition="'$(ErrorCode)' != '0'" Text="Error building CSS file"/>
     </Target>
     ```
+ - If you're developing on machines with different OSs, you can add the build script down below into your `.csproj` file, and have different scripts run based on your operating system. Make sure you modify the paths to actually work. I recommend trying them out in your terminal first. Also make sure you download both the Linux and Windows executable if you're jumping between systems.
+
+```xml
+<Target Name="UpdateTailwindCSS" BeforeTargets="Compile">
+  <!-- The code below runs only on Linux operating systems -->
+  <Exec Command="./tailwindcss -i Styles/app.css -o wwwroot/css/app.css" Condition="$([MSBuild]::IsOSPlatform('Linux'))" ContinueOnError="true">
+    <Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
+  </Exec>
+  
+  <!-- The code below runs only on Windows operating systems -->
+  <Exec Command=".\tailwindcss.exe -i Styles\app.css -o wwwroot\css\app.css" Condition="$([MSBuild]::IsOSPlatform('Windows'))" ContinueOnError="true">
+    <Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
+  </Exec>
+  
+  <Error Condition="'$(ErrorCode)' != '0'" Text="Error building CSS"/>
+</Target>
+```
+
