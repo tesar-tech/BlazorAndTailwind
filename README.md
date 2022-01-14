@@ -51,7 +51,7 @@ This takes your current CSS file (app.css), prepends its content to generated ta
     <link href="css/app.min.css" rel="stylesheet" />
     ```
 
-- Add some tailwind class to test the functionality. This will pang background with green color. On hover text color will change to amber and will get bigger.
+- Add some tailwind class to test the functionality. This will fill background with green color. On hover, text color will change to amber and will get bigger.
 
   ``` html
     <h1 class="bg-green-500 hover:text-amber-300 text-lg hover:text-2xl">Hello, world!</h1>
@@ -61,6 +61,7 @@ This takes your current CSS file (app.css), prepends its content to generated ta
 
 ## Few notes and tips
 
+- (Let me know yours by creating an issue!)
 - For even quicker setting you can use CDN: `<script src="https://cdn.tailwindcss.com"></script>`
 - [Tailwind playground]( https://play.tailwindcss.com/) is a great place to create prototypes. It is fast (you see changes instantly), vscode based and allows you to save your work.
 - tailwind build process is rather quick, but sometimes leaves a mess inside the CSS file. For example, it will keep all the classes that were previously used (but are not used anymore)
@@ -82,19 +83,19 @@ This takes your current CSS file (app.css), prepends its content to generated ta
     ```
  - If you're developing on machines with different OSs, you can add the build script down below into your `.csproj` file, and have different scripts run based on your operating system. Make sure you modify the paths to actually work. I recommend trying them out in your terminal first. Also make sure you download both the Linux and Windows executable if you're jumping between systems.
 
-```xml
-<Target Name="UpdateTailwindCSS" BeforeTargets="Compile">
-  <!-- The code below runs only on Linux operating systems -->
-  <Exec Command="./tailwindcss -i Styles/app.css -o wwwroot/css/app.css" Condition="$([MSBuild]::IsOSPlatform('Linux'))" ContinueOnError="true">
-    <Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
-  </Exec>
-  
-  <!-- The code below runs only on Windows operating systems -->
-  <Exec Command=".\tailwindcss.exe -i Styles\app.css -o wwwroot\css\app.css" Condition="$([MSBuild]::IsOSPlatform('Windows'))" ContinueOnError="true">
-    <Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
-  </Exec>
-  
-  <Error Condition="'$(ErrorCode)' != '0'" Text="Error building CSS"/>
-</Target>
-```
+    ```xml
+    <Target Name="UpdateTailwindCSS" BeforeTargets="Compile">
+      <!-- The code below runs only on Linux operating systems -->
+      <Exec Command="./tailwindcss -i Styles/app.css -o wwwroot/css/app.css" Condition="$([MSBuild]::IsOSPlatform('Linux'))" ContinueOnError="true">
+        <Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
+      </Exec>
+
+      <!-- The code below runs only on Windows operating systems -->
+      <Exec Command=".\tailwindcss.exe -i Styles\app.css -o wwwroot\css\app.css" Condition="$([MSBuild]::IsOSPlatform('Windows'))" ContinueOnError="true">
+        <Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
+      </Exec>
+
+      <Error Condition="'$(ErrorCode)' != '0'" Text="Error building CSS"/>
+    </Target>
+    ```
 
