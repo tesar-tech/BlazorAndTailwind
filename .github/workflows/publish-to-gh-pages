@@ -1,0 +1,37 @@
+name: Build and deploy Blazor WASM app to github pages
+
+on:
+  push:
+    branches: [ develop ] 
+env:
+  PUBLISH_DIR: output 
+  
+jobs:
+  deploy-to-github-pages:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3 
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1 
+      with:
+        dotnet-version: 6.0.x 
+    - name: Publish with dotnet 
+      run: dotnet publish --configuration Release --output ${{env.PUBLISH_DIR}}
+  
+    # change base tag in index.html from '/' na 'BlazorAndTailwind' 
+    - name: Change base-tag in index.html from / to BlazorAndTailwind
+      run: sed -i 's/<base href="\/"[[:blank:]]\/>/<base href="\/BlazorAndTailwind\/" \/>/g' ${{env.PUBLISH_DIR}}/wwwroot/index.html
+     
+    - name: copy index.html to 404.html
+      run: cp ${{env.PUBLISH_DIR}}/wwwroot/index.html ${{env.PUBLISH_DIR}}/wwwroot/404.html
+      
+    - name: Add .nojekyll file
+      run: touch ${{env.PUBLISH_DIR}}/wwwroot/.nojekyll      
+  
+    - name: Commit wwwroot to GitHub Pages 
+      uses: JamesIves/github-pages-deploy-action@v4.2.5
+      with:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+        BRANCH: gh-pages
+        FOLDER: ${{env.PUBLISH_DIR}}/wwwroot 
+      
