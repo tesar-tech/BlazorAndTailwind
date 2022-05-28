@@ -11,11 +11,11 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.5" PrivateAssets="all" />
   </ItemGroup>
 
-	<Target Name="UpdateTailwindCSS" BeforeTargets="Compile">
+	<!--<Target Name="UpdateTailwindCSS" BeforeTargets="Compile">
 		<Exec Command="tw -i .\wwwroot\css\app.css -o .\wwwroot\css\app.min.css" ContinueOnError="true">
 			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
 		</Exec>
 		<Error Condition="'$(ErrorCode)' != '0'" Text="Error building CSS file"/>
-	</Target>
+	</Target>-->
 
 </Project>
