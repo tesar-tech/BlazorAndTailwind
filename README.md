@@ -4,9 +4,16 @@ Blazor is great and Tailwind CSS makes styling bearable.
 
 In version 3 of Tailwind CSS, the setting for Blazor app got much easier, because a brand new standalone tailwind CLI has been released. **No need for npm to be installed**.
 
-These notes may be useful for anyone who would like to test the Blazor&Tailwind connection.
+These notes may be useful for anyone who would like to test the Blazor&Tailwind combo.
 
-(Add your own experience in the list below (or an issue))
+## List of contents
+
+- Setup and usage (this README file)
+- DropdownMenu - [more info](Articles/DropdownMenu), [demo app](https://tesar-tech.github.io/BlazorAndTailwind/dropdownmenu).
+
+  ![extended](Articles/DropdownMenu/media/extended.gif)
+
+(Let me know about your own experience, project or idea using PR, issue or [Twitter PM](https://twitter.com/tesar_tech))
 
 ## Quick guide (windows)
 
