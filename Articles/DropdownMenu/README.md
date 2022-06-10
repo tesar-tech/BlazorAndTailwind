@@ -22,6 +22,8 @@ Decent solution for simple dropdown exists. The magic is in `focus-within` css p
 
 [Live demo on play.tailwindcss.com](https://play.tailwindcss.com/xSihfwdQuZ)
 
+([Extended version with tooltip triangle](https://play.tailwindcss.com/KO8cXX7sBN))
+
 ### How does that work?
 
 - The container has class `group`. Using this, we can affect other elements inside that div.
