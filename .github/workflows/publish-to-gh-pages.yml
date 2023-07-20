@@ -18,16 +18,13 @@ jobs:
     - name: Publish with dotnet 
       run: dotnet publish --configuration Release --output ${{env.PUBLISH_DIR}}
   
-    # change base tag in index.html from '/' na 'BlazorAndTailwind' 
+    # change base tag in index.html from '/' to 'BlazorAndTailwind' 
     - name: Change base-tag in index.html from / to BlazorAndTailwind
       run: sed -i 's/<base href="\/"[[:blank:]]\/>/<base href="\/BlazorAndTailwind\/" \/>/g' ${{env.PUBLISH_DIR}}/wwwroot/index.html
      
     - name: copy index.html to 404.html
       run: cp ${{env.PUBLISH_DIR}}/wwwroot/index.html ${{env.PUBLISH_DIR}}/wwwroot/404.html
       
-    - name: Add .nojekyll file
-      run: touch ${{env.PUBLISH_DIR}}/wwwroot/.nojekyll      
-  
     - name: Commit wwwroot to GitHub Pages 
       uses: JamesIves/github-pages-deploy-action@v4.2.5
       with:

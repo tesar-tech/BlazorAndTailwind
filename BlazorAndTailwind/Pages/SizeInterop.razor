@@ -1,0 +1,83 @@
+﻿@page "/SizeInterop"
+@implements IAsyncDisposable
+@inject IJSRuntime JSRuntime
+
+<div class="mb-5 text-lg">
+    <p>This page demonstrates how to detect window size changes in a Blazor application using JavaScript Interop. As you resize the window, notice how the text and colors change in response.</p>
+    <p>Implementation:</p>
+    <ul class="list-disc list-inside">
+        <li><a href="https://github.com/tesar-tech/BlazorAndTailwind/blob/master/BlazorAndTailwind/Pages/SizeInterop.razor.js">SizeInterop.razor.js</a></li>
+        <li><a href="https://github.com/tesar-tech/BlazorAndTailwind/blob/master/BlazorAndTailwind/Pages/SizeInterop.razor">SizeInterop.razor</a></li>
+    </ul>
+    <p>Additional resources:</p>
+    <ul class="list-disc list-inside">
+        <li><a href="https://stackoverflow.com/a/69530806/1154773" target="_blank">StackOverflow Post on Window Size Detection with Blazor</a></li>
+        <li><a href="https://github.com/EdCharbeneau/BlazorSize">Blazor size repo</a> that solves this issue on another level</li>
+    </ul>
+</div>
+
+<div class="flex flex-col px-3 py-2 mb-5
+    sm:bg-orange-400 md:bg-red-400 lg:bg-violet-400 xl:bg-violet-800"
+     style="background-color: @($"hsl({currentWidth / 3.6}deg, 100%, 50%)")">
+
+    <span class="text-lg font-bold">This div changes colors based on Tailwind CSS media breakpoints:</span>
+    <span class="text-xl font-semibold block sm:hidden">XS - Extra Small Devices</span>
+    <span class="text-xl font-semibold hidden sm:block md:hidden">SM - Small Devices</span>
+    <span class="text-xl font-semibold hidden md:block lg:hidden">MD - Medium Devices</span>
+    <span class="text-xl font-semibold hidden lg:block xl:hidden">LG</span>
+    <span class="text-xl font-semibold hidden xl:block">XL and above - Large Devices</span>
+</div>
+
+<div style="color:@($"hsl({currentWidth}deg, 100%, 50%)")" class="bg-gray-800 p-5 rounded-lg text-lg">
+    Current window size (obtained from Blazor/JavaScript Interop): <strong>@currentWidth x @currentHeight (@currentScreenSize.ToString().ToUpper())</strong>
+</div>
+
+
+@code {
+
+    private IJSObjectReference? _module;
+    private DotNetObjectReference<SizeInterop>? _currentComponentReference;
+    int currentWidth;
+    int currentHeight;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./Pages/SizeInterop.razor.js");
+            _currentComponentReference = DotNetObjectReference.Create(this);
+            await _module.InvokeVoidAsync("initResizeListener", _currentComponentReference);
+        }
+    }
+
+
+    public async ValueTask DisposeAsync()
+    {
+
+        if (_module is not null)
+            await _module.InvokeVoidAsync("removeResizeListener");
+        _currentComponentReference?.Dispose();
+    }
+
+    [JSInvokable]
+    public void OnResize(double w, double h)
+    {
+        currentWidth = (int)Math.Round(w);
+        currentHeight = (int)Math.Round(h);
+
+        currentScreenSize = Enum.GetValues<ScreenSize>().LastOrDefault(size => w >= (int)size);
+
+        StateHasChanged();
+    }
+
+
+    ScreenSize currentScreenSize;
+    public enum ScreenSize
+    {
+        Xs = 0,
+        Sm = 640,
+        Md = 768,
+        Lg = 1024,
+        Xl = 1280
+    }
+}
