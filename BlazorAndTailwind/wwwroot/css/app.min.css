@@ -1544,6 +1544,10 @@ video {
   height:3.5rem
 }
 
+.min-h-screen{
+  min-height:100vh
+}
+
 .w-6{
   width:1.5rem
 }
@@ -1593,6 +1597,10 @@ video {
 
 .list-disc{
   list-style-type:disc
+}
+
+.flex-row{
+  flex-direction:row
 }
 
 .flex-col{
@@ -1940,6 +1948,19 @@ a, .btn-link {
 
   .sm\:hidden{
     display:none
+  }
+
+  .sm\:min-w-max{
+    min-width:-moz-max-content;
+    min-width:max-content
+  }
+
+  .sm\:flex-row{
+    flex-direction:row
+  }
+
+  .sm\:flex-col{
+    flex-direction:column
   }
 
   .sm\:bg-orange-400{

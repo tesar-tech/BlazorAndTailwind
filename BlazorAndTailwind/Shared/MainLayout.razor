@@ -1,7 +1,7 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="h-screen flex">
-    <div class="min-w-max bg-gradient-to-b from-slate-800 to-red-950 shadow-md">
+<div class="h-screen flex flex-col sm:flex-row">
+    <div class="sm:min-w-max bg-gradient-to-b from-slate-800 to-red-950 shadow-md">
         <NavMenu />
     </div>
 
@@ -14,7 +14,7 @@
             </a>
         </div>
 
-        <article class=" p-4">
+        <article class=" p-4 min-h-screen">
             @Body
         </article>
     </main>
