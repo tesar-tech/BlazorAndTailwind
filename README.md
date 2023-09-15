@@ -15,8 +15,16 @@ These notes may be useful for anyone who would like to test the Blazor&Tailwind 
 
 (Let me know about your own experience, project or idea using PR, issue or [Twitter PM](https://twitter.com/tesar_tech))
 
-## Quick guide (windows)
 
+
+## Quick guide 
+
+### dotnet-tailwind
+
+- https://github.com/codymullins/dotnet-tailwind
+
+
+### Custom way (Windows)
 - [Download](https://github.com/tailwindlabs/tailwindcss/releases) `tailwindcss-windows-x64.exe`
 - Rename file to `tw` (not necessary, but makes life easier)
   - or you can add the location to Path variable in windows (like I did)
