@@ -6,6 +6,16 @@ In version 3 of Tailwind CSS, the setting for Blazor app got much easier, becaus
 
 These notes may be useful for anyone who would like to test the Blazor&Tailwind combo.
 
+## Quicly about the Blazor-Tailwind symbiosis 
+
+- You can use [tailwind cli](https://tailwindcss.com/docs/installation). It enables you to run tailwind withouth npm.
+  - On Windows you can obtain it by `winget install -e --id TailwindLabs.TailwindCSS`
+- Run the `tailwindcss -i .\wwwroot\app.css -o .\wwwroot\app.min.css -w` where the `tailwind.config.js` resides
+- Don't including `app.min.css` in git, but rather use build action. You can take some [inspiration](https://github.com/tesar-tech/BlazorStatic/blob/9e5fef375667b387fe586e04af77d4eca56396b2/.github/workflows/publish-to-ghpages-and-nuget.yml#L22) how to download and use the cli on GitHub Action.
+- You no longer need scoped CSS with tailwind (like `MainLayout.razor.css`)
+  
+- The only drawback of not having npm installed I see is hte lack of autocomplete of tw classes in Rider.
+
 ## List of contents
 
 - Setup and usage (this README file)
