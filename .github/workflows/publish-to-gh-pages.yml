@@ -2,7 +2,7 @@ name: Build and deploy Blazor WASM app to github pages
 
 on:
   push:
-    branches: [ * ] 
+    branches: '*'
     
 env:
   PUBLISH_DIR: output 
