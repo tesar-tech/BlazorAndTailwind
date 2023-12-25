@@ -12,6 +12,9 @@
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
+.idea/
+encodings.xml
+src/wwwroot/app.min.css
 
 # Mono auto generated files
 mono_crash.*

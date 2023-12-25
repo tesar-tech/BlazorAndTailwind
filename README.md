@@ -2,87 +2,61 @@
 
 Blazor is great and Tailwind CSS makes styling bearable.
 
-In version 3 of Tailwind CSS, the setting for Blazor app got much easier, because a brand new standalone tailwind CLI has been released. **No need for npm to be installed**.
-
 These notes may be useful for anyone who would like to test the Blazor&Tailwind combo.
 
-## Quicly about the Blazor-Tailwind symbiosis 
+## Quick setup
+
+
+- For a quick and easy way to experiment with Tailwind CSS in your Blazor project, simply incorporate Tailwind's [Play CDN](https://tailwindcss.com/docs/installation/play-cdn) link into your `index.html` (or `App.razor`) file. This approach offers a straightforward method to start using Tailwind without the need for extensive setup. Your integration would look something like this:
+  ```html
+   <script src="https://cdn.tailwindcss.com"></script>
+  ```
+  - Then just add the Tailwind classes to your HTML elements. For example:
+  ```html
+  <div class="bg-blue-500 text-white p-4">
+    This is a Tailwind styled div.
+  </div>
+  ```
+   - This approach is not suitable for production use. For a more robust solution, see the next section.
+
 
 - You can use [tailwind cli](https://tailwindcss.com/docs/installation). It enables you to run tailwind withouth npm.
   - On Windows you can obtain it by `winget install -e --id TailwindLabs.TailwindCSS`
-- Run the `tailwindcss -i .\wwwroot\app.css -o .\wwwroot\app.min.css -w` where the `tailwind.config.js` resides
-- Don't including `app.min.css` in git, but rather use build action. You can take some [inspiration](https://github.com/tesar-tech/BlazorStatic/blob/9e5fef375667b387fe586e04af77d4eca56396b2/.github/workflows/publish-to-ghpages-and-nuget.yml#L22) how to download and use the cli on GitHub Action.
-- You no longer need scoped CSS with tailwind (like `MainLayout.razor.css`)
-  
-- The only drawback of not having npm installed I see is hte lack of autocomplete of tw classes in Rider.
-
-## List of contents
-
-- Setup and usage (this README file)
-- DropdownMenu - [more info](Articles/DropdownMenu), [demo app](https://tesar-tech.github.io/BlazorAndTailwind/dropdownmenu).
-
-  ![extended](Articles/DropdownMenu/media/extended.gif)
-
-(Let me know about your own experience, project or idea using PR, issue or [Twitter PM](https://twitter.com/tesar_tech))
-
-
-
-## Quick guide 
-
-### dotnet-tailwind
-
-- https://github.com/codymullins/dotnet-tailwind
-
-
-### Custom way (Windows)
-- [Download](https://github.com/tailwindlabs/tailwindcss/releases) `tailwindcss-windows-x64.exe`
-- Rename file to `tw` (not necessary, but makes life easier)
-  - or you can add the location to Path variable in windows (like I did)
-- Open terminal in root of your project and: `./tw.exe init`, this creates `tailwind.config.js`
-![tailwind init](media/2021-12-21-17-11-37.png)
-- Inside the `tailwind.config.js` file insert this code below. It will watch for all HTML and razor files. Whenever a new tailwind class appears in them, tailwind CLI will re-generate your `app.min.css` file (more in next step)
-
-    ```js
-    module.exports = {
-    content: [
-        './**/*.html',
-        './**/*.razor',
-    ],
-    theme: {
-    extend: {
-        
-        },
-        },
-    plugins: [],
-    }
-    ```
-
-- add tailwind directives to app.css. (place it after any imports)
-
-    ```css
-    @tailwind base;
-    @tailwind components;
-    @tailwind utilities;
-    ```
-
-- Now run tailwind watch with:
-`./tw -i .\wwwroot\css\app.css -o .\wwwroot\css\app.min.css --watch`
-![tailwind watch](media/2021-12-21-17-13-32.png)
-This takes your current CSS file (app.css), prepends its content to generated tailwind classes, and outputs `app.min.css` in the same folder.
-
-- Now change the path in `index.html` (or `_Host.cshtml` for Blazor server) to use `app.min.css` instead of `app.css`. It will look like this:
-
-    ```html
-    <link href="css/app.min.css" rel="stylesheet" />
-    ```
-
-- Add some tailwind class to test the functionality. This will fill background with green color. On hover, text color will change to amber and will get bigger.
-
-  ``` html
-    <h1 class="bg-green-500 hover:text-amber-300 text-lg hover:text-2xl">Hello, world!</h1>
+  ![tailwind cli install](media/README/img-1.png)
+- Add this to your [app.css](./src/wwwroot/app.css) file.
+  ```css
+  @tailwind base;
+  @tailwind components;
+  @tailwind utilities;
   ```
+- Add [`tailwind.config.js`](./src/tailwind.config.js) file to your project root. You can use `tailwindcss init` command to create it.
+ ![tailwind init](media/README/img-2.png)
+ - Add razor files to the `content` array:
+  ```js
+  module.exports = {
+    content:
+        [
+            './**/*.razor',
+            './wwwroot/index.html'
+        ],
+  }
+  ```
+- Run the `tailwindcss -i .\wwwroot\app.css -o .\wwwroot\app.min.css -w` where the `tailwind.config.js` resides.
+  - (Note that `app.css` is directly in the `wwwroot` folder)
+  ![tailwind css](media/README/img-3.png)
+- Change the path in [`index.html`](./src/wwwroot/index.html) (or `App.razor` if you don't use standalone wasm app) to use `app.min.css` instead of `app.css`. It will look like this:
+  ```html
+  <link href="app.min.css" rel="stylesheet" />
+  ```
+- Don't including `app.min.css` in git, but rather use build action. Check [the pipeline](./.github/workflows/publish-to-gh-pages.yml) to see how to download and use tailwind cli in the pipeline.
 
-    ![tailwind watch](media/res.gif)
+## Other tips
+
+- Tailwind Blazor loader (see [index.html](./src/wwwroot/index.html)):
+
+  ![loader](media/README/img.png)
+
+
 
 ## Few notes and tips
 
@@ -95,7 +69,7 @@ This takes your current CSS file (app.css), prepends its content to generated ta
 - Tailwind and bootstrap have some clashing CSS classes (px-2 for example). If you need to keep both (I have to, because I am using a component library, which is based on bootstrap) you can use [prefix](https://tailwindcss.com/docs/configuration#prefix) for tailwind classes.
 - There is currently no tailwind package in the chocolatey package manager. You can vote for it [here](https://github.com/tailwindlabs/tailwindcss/discussions/6650).
 - There is [this](https://github.com/tailwindlabs/tailwindcss-intellisense) a good extension for vscode, which brings pleasant experience from tailwind playground to your desktop. Just open root folder of your project (where the `tailwind.config.js` is).
-- I had a bad experience with dotnet hot reload when CSS files are regenerated. It does weird things, like not updating (even after Ctrl+R), serving older versions, etc.. You can turn off hot reloading with: `dotnet watch --project . --no-hot-reload`. I am in the progress of finding a better solution. Anybody knows it already?
+- (not an issue anymore) ~~I had a bad experience with dotnet hot reload when CSS files are regenerated. It does weird things, like not updating (even after Ctrl+R), serving older versions, etc.. You can turn off hot reloading with: `dotnet watch --project . --no-hot-reload`. I am in the progress of finding a better solution. Anybody knows it already?~~ 
 - If you want to build your CSS file every time you reload your project you can add the following into your `.csproj` file. You do have to change the command to set the input and output directories and the executable name and it should work. However it doesn't trigger on hot reloads so you have to reload manually.
 
     ```xml
