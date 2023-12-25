@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>BlazorAndTailwind</title>
+    <base href="/"/>
+    <link rel="stylesheet" href="app.min.css"/>
+</head>
+
+<body class="from-violet-600 to-sky-500 bg-gradient-to-tr h-screen w-full">
+<div id="app" class="">
+    <div class="absolute right-1/2 bottom-1/2  transform translate-x-1/2 translate-y-1/2 ">
+        <div class="linear-progress h-4 rounded-full overflow-hidden w-[50vw] relative bg-slate-400
+                after:bg-amber-500 after:absolute after:inset-0 after:origin-top-left 
+                after:transition-transform after:[scale:var(--blazor-load-percentage,0%)_100%]">
+        </div>
+    </div>
+</div>
+
+<script src="_framework/blazor.webassembly.js"></script>
+</body>
+
+</html>

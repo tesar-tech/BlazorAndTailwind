@@ -2,33 +2,37 @@ name: Build and deploy Blazor WASM app to github pages
 
 on:
   push:
-    branches: [ master ] 
+    branches: [ * ] 
+    
 env:
   PUBLISH_DIR: output 
+  WEBAPP_PATH: ./src/
+  WEBAPP_CSPROJ: BlazorAndTailwind.csproj
   
 jobs:
   deploy-to-github-pages:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write 
     steps:
     - uses: actions/checkout@v3 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1 
+
+    - name: Tailwind - download and run cli
+      run: |
+       wget https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-linux-x64 -O /usr/local/bin/tailwindcss
+       chmod +x /usr/local/bin/tailwindcss
+       cd ${{ env.WEBAPP_PATH }}
+       tailwindcss --input ./wwwroot/app.css  --output ./wwwroot/app.min.css  --minify
+
+    - name: Change <base href="" /> in App.razor to match gh repo name
+      run: |
+        REPO_NAME=$(echo "${{ github.repository }}" | awk -F '/' '{print $NF}')
+        sed -i 's/<base href="\/" \/>/<base href="\/'$REPO_NAME'\/" \/>/g' ${{ env.WEBAPP_PATH }}wwwroot/index.html
+    - name: Run webapp and generate static files
+      run: |
+          dotnet build --project ${{ env.WEBAPP_PATH }}${{env.WEBAPP_CSPROJ}}  --configuration Release
+
+    - name: Deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@v4
       with:
-        dotnet-version: 7.0.x 
-    - name: Publish with dotnet 
-      run: dotnet publish --configuration Release --output ${{env.PUBLISH_DIR}}
-  
-    # change base tag in index.html from '/' to 'BlazorAndTailwind' 
-    - name: Change base-tag in index.html from / to BlazorAndTailwind
-      run: sed -i 's/<base href="\/"[[:blank:]]\/>/<base href="\/BlazorAndTailwind\/" \/>/g' ${{env.PUBLISH_DIR}}/wwwroot/index.html
-     
-    - name: copy index.html to 404.html
-      run: cp ${{env.PUBLISH_DIR}}/wwwroot/index.html ${{env.PUBLISH_DIR}}/wwwroot/404.html
-      
-    - name: Commit wwwroot to GitHub Pages 
-      uses: JamesIves/github-pages-deploy-action@v4.2.5
-      with:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
-        BRANCH: gh-pages
-        FOLDER: ${{env.PUBLISH_DIR}}/wwwroot 
-      
+        folder: ${{ env.WEBAPP_PATH }}${{env.PUBLISH_DIR}}
