@@ -32,8 +32,11 @@ jobs:
     - name: Publish .NET app
       run: dotnet publish  ${{ env.WEBAPP_PATH }}${{env.WEBAPP_CSPROJ}}  --configuration Release -o ${{ env.WEBAPP_PATH }}${{env.PUBLISH_DIR}}
     
-    - name: copy index.html to 404.html
-      run: cp ${{env.PUBLISH_DIR}}/wwwroot/index.html ${{env.PUBLISH_DIR}}/wwwroot/404.html  
+    - name: copy index.html to 404.html AND add .nojekyll file (https://github.blog/2009-12-29-bypassing-jekyll-on-github-pages/)
+      run: |
+          cp ${{ env.WEBAPP_PATH }}${{env.PUBLISH_DIR}}/wwwroot/index.html ${{ env.WEBAPP_PATH }}${{env.PUBLISH_DIR}}/wwwroot/404.html  
+          touch ${{ env.WEBAPP_PATH }}${{env.PUBLISH_DIR}}/wwwroot/.nojekyll
+
 
     - name: Deploy to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@v4
