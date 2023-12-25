@@ -1,11 +1,10 @@
 # Blazor and Tailwind CSS
 
-Blazor is great and Tailwind CSS makes styling bearable.
+[Blazor](https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor), a powerful framework for building interactive client-side web UI with .NET, and [Tailwind CSS](https://tailwindcss.com/), a highly customizable, low-level CSS framework, come together to provide a streamlined development experience. 
 
-These notes may be useful for anyone who would like to test the Blazor&Tailwind combo.
+This guide is designed for developers who are interested in exploring the synergy between Blazor and Tailwind CSS. It provides insights and practical steps to integrate these technologies effectively, enhancing both the aesthetics and functionality of your web applications.
 
 ## Quick setup
-
 
 - For a quick and easy way to experiment with Tailwind CSS in your Blazor project, simply incorporate Tailwind's [Play CDN](https://tailwindcss.com/docs/installation/play-cdn) link into your `index.html` (or `App.razor`) file. This approach offers a straightforward method to start using Tailwind without the need for extensive setup. Your integration would look something like this:
   ```html
@@ -20,35 +19,37 @@ These notes may be useful for anyone who would like to test the Blazor&Tailwind 
    - This approach is not suitable for production use. For a more robust solution, see the next section.
 
 
-- You can use [tailwind cli](https://tailwindcss.com/docs/installation). It enables you to run tailwind withouth npm.
+- You can use [tailwind cli](https://tailwindcss.com/docs/installation). It enables you to run tailwind without npm.
   - On Windows you can obtain it by `winget install -e --id TailwindLabs.TailwindCSS`
   ![tailwind cli install](media/README/img-1.png)
-- Add this to your [app.css](./src/wwwroot/app.css) file.
+- Add the following to your [app.css](./src/wwwroot/app.css) file.
   ```css
   @tailwind base;
   @tailwind components;
   @tailwind utilities;
   ```
-- Add [`tailwind.config.js`](./src/tailwind.config.js) file to your project root. You can use `tailwindcss init` command to create it.
+- Add a [`tailwind.config.js`](./src/tailwind.config.js) file to your project root. You can run `tailwindcss init` command in your terminal to create it.
  ![tailwind init](media/README/img-2.png)
- - Add razor files to the `content` array:
+ - Add razor files to the `content` array in `tailwind.config.js`:
   ```js
   module.exports = {
     content:
         [
-            './**/*.razor',
-            './wwwroot/index.html'
+            './**/*.razor',//it will scan all razor files in the project and will find all the tailwind classes that you use
+            './wwwroot/index.html' //not necessary if you use Blazor 8 Web App (not just standalone wasm app)
         ],
   }
   ```
 - Run the `tailwindcss -i .\wwwroot\app.css -o .\wwwroot\app.min.css -w` where the `tailwind.config.js` resides.
   - (Note that `app.css` is directly in the `wwwroot` folder)
+  - This will generate `app.min.css` file in the `wwwroot` folder. `app.min.css` will contain all the classes that you use in your razor files.
   ![tailwind css](media/README/img-3.png)
 - Change the path in [`index.html`](./src/wwwroot/index.html) (or `App.razor` if you don't use standalone wasm app) to use `app.min.css` instead of `app.css`. It will look like this:
   ```html
   <link href="app.min.css" rel="stylesheet" />
   ```
-- Don't including `app.min.css` in git, but rather use build action. Check [the pipeline](./.github/workflows/publish-to-gh-pages.yml) to see how to download and use tailwind cli in the pipeline.
+  - `app.css` is just for tailwind, `app.min.css` is for your app.
+- Don't include `app.min.css` in git, but rather use build action. Check [the pipeline](./.github/workflows/publish-to-gh-pages.yml) to see how to download and use tailwind cli in the pipeline.
 
 ## Other tips
 
