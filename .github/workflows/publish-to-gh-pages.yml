@@ -29,8 +29,8 @@ jobs:
         REPO_NAME=$(echo "${{ github.repository }}" | awk -F '/' '{print $NF}')
         sed -i 's/<base href="\/" \/>/<base href="\/'$REPO_NAME'\/" \/>/g' ${{ env.WEBAPP_PATH }}wwwroot/index.html
    
-    - name: Build .NET app
-      run: dotnet build  ${{ env.WEBAPP_PATH }}${{env.WEBAPP_CSPROJ}}  --configuration Release -o ${{ env.WEBAPP_PATH }}${{env.PUBLISH_DIR}}
+    - name: Publish .NET app
+      run: dotnet publish  ${{ env.WEBAPP_PATH }}${{env.WEBAPP_CSPROJ}}  --configuration Release -o ${{ env.WEBAPP_PATH }}${{env.PUBLISH_DIR}}
 
     - name: Deploy to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@v4

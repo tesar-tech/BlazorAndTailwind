@@ -51,18 +51,22 @@ This guide is designed for developers who are interested in exploring the synerg
   - `app.css` is just for tailwind, `app.min.css` is for your app.
 - Don't include `app.min.css` in git, but rather use build action. Check [the pipeline](./.github/workflows/publish-to-gh-pages.yml) to see how to download and use tailwind cli in the pipeline.
 
-## Other tips
+## Related repositories
 
+- [dotnet-tailwind](https://github.com/codymullins/dotnet-tailwind). Basic tool to bootstrap Tailwind in .NET Blazor projects.
+- [Blazorise](https://github.com/Megabit/Blazorise). Blazorise is a component library built on top of Blazor with support fresh support for Tailwind CSS. It uses [Flowbite](https://flowbite.com/docs/getting-started/introduction/) components.
+- [BlazorStatic](https://github.com/tesar-tech/BlazorStatic/) is a static site generator for Blazor. It uses Tailwind as the default CSS framework.
+- [DragAndDropList](https://github.com/tesar-tech/DragAndDropList). Minimal implementation of drag & drop list in Blazor WebAssembly using Tailwind CSS.
+- ❓Your repository here? Create an issue or PR!
+
+
+## Notes and tips
+
+- ❓(Let me know yours!)
 - Tailwind Blazor loader (see [index.html](./src/wwwroot/index.html)):
 
   ![loader](media/README/img.png)
 
-
-
-## Few notes and tips
-
-- (Let me know yours by creating an issue!)
-- For even quicker setting you can use CDN: `<script src="https://cdn.tailwindcss.com"></script>`
 - [Tailwind playground]( https://play.tailwindcss.com/) is a great place to create prototypes. It is fast (you see changes instantly), vscode based and allows you to save your work.
 - tailwind build process is rather quick, but sometimes leaves a mess inside the CSS file. For example, it will keep all the classes that were previously used (but are not used anymore)
   - You can delete the `app.min.css` file at any time (it will generate it again).
