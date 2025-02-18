@@ -16,6 +16,11 @@ jobs:
       contents: write 
     steps:
     - uses: actions/checkout@v3 
+    
+    - name: Setup .NET 9
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '9.0.x'
 
     - name: Tailwind - download and run cli
       run: |
